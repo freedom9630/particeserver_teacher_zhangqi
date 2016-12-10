@@ -22,8 +22,8 @@ public class APIController {
 
 	@Autowired
 	IUserService userService;
-	
-	
+
+
 	@RequestMapping(value = "/hello", method=RequestMethod.GET)
 	public @ResponseBody String hello(){
 		return "HELLO WORLD";
@@ -37,13 +37,13 @@ public class APIController {
 			@RequestParam String name,
 			MultipartFile avatar,
 			HttpServletRequest request){
-		
+
 		User user = new User();
 		user.setAccount(account);
 		user.setPasswordHash(passwordHash);
 		user.setEmail(email);
 		user.setName(name);
-		
+
 		if(avatar!=null){
 			try{
 				String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
@@ -53,7 +53,33 @@ public class APIController {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return userService.save(user);
+	}
+
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public User login(
+			@RequestParam String account,
+			@RequestParam String passwordHash,
+			HttpServletRequest request){
+
+		User user = userService.findByAccount(account);
+		if(user.getPasswordHash().equals(passwordHash)){
+			request.getSession().setAttribute("user", user);
+			return user;
+		}else{
+			return null;
+		}
+
+	}
+	
+	@RequestMapping(value="/me",method=RequestMethod.GET)
+	public User getCurrentUser(HttpServletRequest request){
+		Object obj = request.getSession().getAttribute("current_user");
+		if(obj instanceof User){
+			return (User)obj;
+		}else{
+			return null;
+		}
 	}
 }

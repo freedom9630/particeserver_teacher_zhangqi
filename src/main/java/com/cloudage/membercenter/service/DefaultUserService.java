@@ -22,4 +22,10 @@ public class DefaultUserService implements IUserService {
 	public User save(User user) {
 		return userRepo.save(user);
 	}
+
+	@Override
+	public User findByAccount(String account) {
+		// TODO Auto-generated method stub
+		return userRepo.findUserByAccount(account);
+	}
 }
