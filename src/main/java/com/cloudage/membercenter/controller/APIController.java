@@ -3,6 +3,7 @@ package com.cloudage.membercenter.controller;
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudage.membercenter.entity.User;
+import com.cloudage.membercenter.service.DefaultUserService;
 import com.cloudage.membercenter.service.IUserService;
 
 @RestController
@@ -64,22 +66,40 @@ public class APIController {
 			HttpServletRequest request){
 
 		User user = userService.findByAccount(account);
-		if(user.getPasswordHash().equals(passwordHash)){
-			request.getSession().setAttribute("user", user);
+		if(user!=null && user.getPasswordHash().equals(passwordHash)){
+			HttpSession session = request.getSession(true);
+			session.setAttribute("uid", user);
 			return user;
 		}else{
 			return null;
 		}
 
 	}
-	
+
 	@RequestMapping(value="/me",method=RequestMethod.GET)
 	public User getCurrentUser(HttpServletRequest request){
-		Object obj = request.getSession().getAttribute("current_user");
+		Object obj = request.getSession().getAttribute("uid");
 		if(obj instanceof User){
 			return (User)obj;
 		}else{
 			return null;
 		}
+	}
+
+	@RequestMapping(value="/passwordrecover",method=RequestMethod.POST)
+	public boolean resetPassword(
+			@RequestParam String email,
+			@RequestParam String passwordHash
+			){
+
+		User user = userService.findByEmail(email);
+		if(user==null){
+			return false;
+		}else{
+			user.setPasswordHash(passwordHash);
+			userService.save(user);
+			return true;
+		}
+
 	}
 }

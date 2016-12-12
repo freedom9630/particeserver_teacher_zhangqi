@@ -28,4 +28,16 @@ public class DefaultUserService implements IUserService {
 		// TODO Auto-generated method stub
 		return userRepo.findUserByAccount(account);
 	}
+
+	@Override
+	public User findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepo.findUserByEmail(email);
+	}
+
+	@Override
+	public User findById(Integer id) {
+		// TODO Auto-generated method stub
+		return userRepo.findOne(id);
+	}
 }
