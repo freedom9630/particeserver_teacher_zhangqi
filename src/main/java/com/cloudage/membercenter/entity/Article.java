@@ -86,6 +86,5 @@ public class Article extends BaseEntity {
 		return author.avatar;
 	}
 	
-	
-	
+
 }
