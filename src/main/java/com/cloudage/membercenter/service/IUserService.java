@@ -7,4 +7,5 @@ public interface IUserService {
 	User findByAccount(String account);
 	User findByEmail(String email);
 	User findById(Integer id);
+	
 }

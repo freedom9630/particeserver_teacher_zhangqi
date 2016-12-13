@@ -12,7 +12,7 @@ public class User extends BaseEntity{
 	String name;
 	String email;
 	String avatar;
-
+	
 	@Column(unique=true)
 	public String getAccount() {
 		return account;
