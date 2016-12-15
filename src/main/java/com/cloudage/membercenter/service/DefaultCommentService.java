@@ -16,10 +16,10 @@ import com.cloudage.membercenter.repository.ICommentRepository;
 @Service
 @Transactional
 public class DefaultCommentService implements ICommentService {
-	
+
 	@Autowired
 	ICommentRepository commentRepo;
-	
+
 	public Page<Comment> findCommentsOfArticle(int articleId, int page){
 		Sort sort = new Sort(Direction.DESC, "createDate");
 		PageRequest pageReqeust = new PageRequest(page, 10, sort);
@@ -29,5 +29,10 @@ public class DefaultCommentService implements ICommentService {
 	@Override
 	public Comment save(Comment comment) {
 		return commentRepo.save(comment);
+	}
+
+	@Override
+	public int getCommentCountOfArticle(int articleId) {
+		return commentRepo.commentCountOfArticle(articleId);
 	}
 }

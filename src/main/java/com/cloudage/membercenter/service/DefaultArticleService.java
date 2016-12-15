@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
@@ -49,4 +48,14 @@ public class DefaultArticleService implements IArticleService{
 	public Article findOne(int id) {
 		return articleRepo.findOne(id);
 	}
+
+	@Override
+	public Page<Article> searchTextWithKeyword(String keyword, int page) {
+
+		Sort sort = new Sort(Direction.DESC,"createDate");
+		PageRequest pageRequest = new PageRequest(page,8,sort);
+		return articleRepo.searchTextWithKeyword(keyword, pageRequest);
+	}
+
+
 }
